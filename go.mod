@@ -1,4 +1,4 @@
-module go-common
+module github.com/reber0/go-common
 
 go 1.17
 

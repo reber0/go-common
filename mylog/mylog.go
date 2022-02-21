@@ -49,20 +49,20 @@ func NewLogger() *zap.Logger {
 	consoleCore := zapcore.NewCore(encoderConsole, zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout)), zap.DebugLevel)
 	// 配置 debug/info、 等级
 	infoFileWriteSyncer := zapcore.AddSync(&lumberjack.Logger{
-		Filename:   "./log/info.log", // 日志文件存放目录，如果文件夹不存在会自动创建
-		MaxSize:    2,                // 文件大小限制，单位 MB
-		MaxBackups: 100,              // 最大保留日志文件数量
-		MaxAge:     30,               // 日志文件保留天数
-		Compress:   false,            // 是否压缩处理
+		Filename:   "./logs/info.log", // 日志文件存放目录，如果文件夹不存在会自动创建
+		MaxSize:    2,                 // 文件大小限制，单位 MB
+		MaxBackups: 100,               // 最大保留日志文件数量
+		MaxAge:     30,                // 日志文件保留天数
+		Compress:   false,             // 是否压缩处理
 	})
 	infoFileCore := zapcore.NewCore(encoderFile, zapcore.NewMultiWriteSyncer(infoFileWriteSyncer), lowPriority)
 	// error 文件 writeSyncer
 	errorFileWriteSyncer := zapcore.AddSync(&lumberjack.Logger{
-		Filename:   "./log/error.log", // 日志文件存放目录
-		MaxSize:    1,                 // 文件大小限制，单位 MB
-		MaxBackups: 5,                 // 最大保留日志文件数量
-		MaxAge:     30,                // 日志文件保留天数
-		Compress:   false,             // 是否压缩处理
+		Filename:   "./logs/error.log", // 日志文件存放目录
+		MaxSize:    1,                  // 文件大小限制，单位 MB
+		MaxBackups: 5,                  // 最大保留日志文件数量
+		MaxAge:     30,                 // 日志文件保留天数
+		Compress:   false,              // 是否压缩处理
 	})
 	errorFileCore := zapcore.NewCore(encoderFile, zapcore.NewMultiWriteSyncer(errorFileWriteSyncer), highPriority)
 

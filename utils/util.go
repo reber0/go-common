@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2021-11-10 09:48:35
- * @LastEditTime: 2022-02-14 14:55:07
+ * @LastEditTime: 2022-03-31 15:53:28
  */
 
 package utils
@@ -65,7 +65,7 @@ func SortSlice(t []string) {
 	})
 }
 
-// 判断是否在 slice, array, map 中
+// 判断 needle 是否在 slice, array, map 中
 func InSlice(needle interface{}, haystack interface{}) bool {
 	return php2go.InArray(needle, haystack)
 }

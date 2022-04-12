@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-02-21 16:51:19
- * @LastEditTime: 2022-02-21 16:51:34
+ * @LastEditTime: 2022-04-12 09:35:21
  */
 package parse
 
@@ -11,6 +11,7 @@ import (
 	"net"
 	"net/url"
 	"path"
+	"strconv"
 	"strings"
 )
 
@@ -55,9 +56,10 @@ func (p *ParseUrl) Host() string {
 }
 
 // 获取 Port
-func (p *ParseUrl) Port() string {
+func (p *ParseUrl) Port() int {
 	_, Port, _ := net.SplitHostPort(p.u.Host)
-	return Port
+	port, _ := strconv.Atoi(Port)
+	return port
 }
 
 // 获取 Path

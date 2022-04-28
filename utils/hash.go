@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-02-14 14:37:10
- * @LastEditTime: 2022-02-14 15:01:09
+ * @LastEditTime: 2022-04-28 10:12:08
  */
 package utils
 
@@ -12,29 +12,37 @@ import (
 	"crypto/cipher"
 	"crypto/md5"
 	"crypto/sha1"
-	"encoding/base64"
-	"fmt"
+	"crypto/sha256"
+	"crypto/sha512"
+	"encoding/hex"
 )
 
-// base64 encode
-func B64Encode(plainText []byte) string {
-	return base64.StdEncoding.EncodeToString(plainText)
-}
-
-// base64 decode
-func B64Decode(cipherText string) []byte {
-	plainText, _ := base64.StdEncoding.DecodeString(cipherText)
-	return plainText
-}
-
 // md5 加密
-func Md5(plainText []byte) string {
-	return fmt.Sprintf("%x", md5.Sum(plainText))
+func Md5(plainText string) string {
+	m := md5.New()
+	m.Write([]byte(plainText))
+	return hex.EncodeToString(m.Sum(nil))
 }
 
 // Sha1 加密
-func Sha1(plainText []byte) string {
-	return fmt.Sprintf("%x", sha1.Sum(plainText))
+func Sha1(plainText string) string {
+	m := sha1.New()
+	m.Write([]byte(plainText))
+	return hex.EncodeToString(m.Sum(nil))
+}
+
+// Sha256 加密
+func Sha256(plainText string) string {
+	m := sha256.New()
+	m.Write([]byte(plainText))
+	return hex.EncodeToString(m.Sum(nil))
+}
+
+// Sha512 加密
+func Sha512(plainText string) string {
+	m := sha512.New()
+	m.Write([]byte(plainText))
+	return hex.EncodeToString(m.Sum(nil))
 }
 
 // AES padding
@@ -51,7 +59,7 @@ func PKCS7UnPadding(plainText []byte) []byte {
 	return plainText[:(length - unpadding)]
 }
 
-// AES 加密, CBC
+// AES 加密，CBC，key 的长度必须为 16, 24 或者 32
 func AesEncrypt(plainText, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -65,7 +73,7 @@ func AesEncrypt(plainText, key []byte) ([]byte, error) {
 	return cipherText, nil
 }
 
-// AES 解密
+// AES 解密，CBC，key 的长度必须为 16, 24 或者 32
 func AesDecrypt(cipherText, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {

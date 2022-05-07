@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-07 20:53:43
- * @LastEditTime: 2022-05-07 13:26:23
+ * @LastEditTime: 2022-05-07 13:33:21
  */
 package myreq
 
@@ -65,7 +65,7 @@ func (r *Response) String() string {
 	}
 
 	contentType := r.Header().Get("Content-Type")
-	e, name, _ := charset.DetermineEncoding(bytes, contentType) // 获取编码
+	e, name, _ := charset.DetermineEncoding(r.body, contentType) // 获取编码
 	if name != "utf-8" {
 		bodyReader := bytes.NewReader(r.body)
 		utf8Obj := transform.NewReader(bodyReader, e.NewDecoder()) // 转化为 utf8 格式

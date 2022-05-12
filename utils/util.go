@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2021-11-10 09:48:35
- * @LastEditTime: 2022-04-28 10:26:56
+ * @LastEditTime: 2022-05-12 15:23:37
  */
 
 package utils
@@ -16,20 +16,52 @@ import (
 	"time"
 
 	"github.com/nsf/termbox-go"
-	"github.com/syyongx/php2go"
 )
 
-// HandleError 用于处理 error
-func HandleError(action string, err error) {
-	if err != nil {
-		_ = fmt.Errorf(fmt.Sprintf("%s => %s\n", action, err))
-	}
-}
-
 // 获取两个 string 的相似度
-func GetRatio(first string, second string) (ratio float64) {
-	_ = php2go.SimilarText(first, second, &ratio)
-	return ratio / 100
+func GetRatio(first string, second string) (percent float64) {
+	// https://github.com/syyongx/php2go/blob/master/php.go#L870
+
+	var similarText func(string, string, int, int) int
+	similarText = func(str1, str2 string, len1, len2 int) int {
+		var sum, max int
+		pos1, pos2 := 0, 0
+
+		// Find the longest segment of the same section in two strings
+		for i := 0; i < len1; i++ {
+			for j := 0; j < len2; j++ {
+				for l := 0; (i+l < len1) && (j+l < len2) && (str1[i+l] == str2[j+l]); l++ {
+					if l+1 > max {
+						max = l + 1
+						pos1 = i
+						pos2 = j
+					}
+				}
+			}
+		}
+
+		if sum = max; sum > 0 {
+			if pos1 > 0 && pos2 > 0 {
+				sum += similarText(str1, str2, pos1, pos2)
+			}
+			if (pos1+max < len1) && (pos2+max < len2) {
+				s1 := []byte(str1)
+				s2 := []byte(str2)
+				sum += similarText(string(s1[pos1+max:]), string(s2[pos2+max:]), len1-pos1-max, len2-pos2-max)
+			}
+		}
+
+		return sum
+	}
+
+	l1, l2 := len(first), len(second)
+	if l1+l2 == 0 {
+		return 0
+	}
+	sim := similarText(first, second, l1, l2)
+	percent = float64(sim*200) / float64(l1+l2)
+
+	return percent / 100
 }
 
 // 获取终端宽度
@@ -105,7 +137,7 @@ func IsFileExist(path string) bool {
 }
 
 // 时间戳转时间字符串 => 2006-01-02 15:04:05
-func UnixToStr(timestamp interface{}) string {
+func Unix2String(timestamp interface{}) string {
 	// 通过 i.(type) 来判断是什么类型,下面的 case 分支匹配到了则执行相关的分支
 	switch timestamp.(type) {
 	case int:

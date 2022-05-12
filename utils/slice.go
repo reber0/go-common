@@ -2,15 +2,14 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-04-28 10:26:09
- * @LastEditTime: 2022-04-28 10:26:11
+ * @LastEditTime: 2022-05-12 15:15:37
  */
 package utils
 
 import (
+	"reflect"
 	"sort"
 	"strings"
-
-	"github.com/syyongx/php2go"
 )
 
 // 反转 [][]string
@@ -35,7 +34,27 @@ func SortSlice(t []string) {
 
 // 判断 needle 是否在 slice, array, map 中
 func InSlice(needle interface{}, haystack interface{}) bool {
-	return php2go.InArray(needle, haystack)
+	// https://github.com/syyongx/php2go/blob/master/php.go#L1265
+
+	val := reflect.ValueOf(haystack)
+	switch val.Kind() {
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < val.Len(); i++ {
+			if reflect.DeepEqual(needle, val.Index(i).Interface()) {
+				return true
+			}
+		}
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			if reflect.DeepEqual(needle, val.MapIndex(k).Interface()) {
+				return true
+			}
+		}
+	default:
+		panic("haystack: haystack type muset be slice, array or map")
+	}
+
+	return false
 }
 
 // slice(string类型)元素去重

@@ -16,7 +16,6 @@ require (
 	github.com/bitly/go-simplejson v0.5.0
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
-	github.com/syyongx/php2go v0.9.6
 	go.uber.org/zap v1.21.0
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd
 	golang.org/x/text v0.3.7

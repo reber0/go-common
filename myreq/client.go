@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2021-12-12 19:32:15
- * @LastEditTime: 2022-02-14 18:08:04
+ * @LastEditTime: 2022-05-18 14:36:20
  */
 
 package myreq
@@ -130,10 +130,9 @@ func (r *Client) Execute(method, url string) (*Response, error) {
 			RawResponse: resp,
 			body:        body,
 		}
-		return response, err
 	}
 	if err != nil {
-		fmt.Println(err)
+		response = nil
 	}
 
 	return response, err

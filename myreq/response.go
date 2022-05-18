@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-07 20:53:43
- * @LastEditTime: 2022-05-12 15:34:16
+ * @LastEditTime: 2022-05-18 14:34:54
  */
 package myreq
 
@@ -84,7 +84,7 @@ func (r *Response) Json() *simplejson.Json {
 
 	res, err := simplejson.NewJson(r.body)
 	if err != nil {
-		fmt.Errorf("(myreq.Response).Json %v\n", err)
+		fmt.Println("(myreq.Response).Json %v\n", err)
 		return &simplejson.Json{}
 	}
 

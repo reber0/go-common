@@ -2,21 +2,42 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2021-11-10 09:48:35
- * @LastEditTime: 2022-05-12 15:23:37
+ * @LastEditTime: 2022-05-31 11:33:11
  */
 
 package utils
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
+	"io"
 	"math/rand"
 	"os"
 	"strconv"
 	"time"
 
+	"github.com/go-resty/resty/v2"
 	"github.com/nsf/termbox-go"
+	"golang.org/x/net/html/charset"
+	"golang.org/x/text/transform"
 )
+
+// 根据 resty 的 resp 获取 utf-8 编码的 html
+func EncodeToUTF8(resp *resty.Response) string {
+	body := resp.Body()
+
+	contentType := resp.Header().Get("Content-Type")
+	e, name, _ := charset.DetermineEncoding(body, contentType) // 获取编码
+	if name != "utf-8" {
+		bodyReader := bytes.NewReader(body)
+		utf8Obj := transform.NewReader(bodyReader, e.NewDecoder()) // 转化为 utf8 格式
+		body, _ := io.ReadAll(utf8Obj)
+		return string(body)
+	}
+
+	return string(body)
+}
 
 // 获取两个 string 的相似度
 func GetRatio(first string, second string) (percent float64) {
@@ -131,7 +152,6 @@ func IsFileExist(path string) bool {
 			return false
 		}
 		panic(err)
-		return false
 	}
 	return true
 }

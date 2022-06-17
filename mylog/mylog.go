@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-05 17:49:03
- * @LastEditTime: 2022-01-07 17:47:44
+ * @LastEditTime: 2022-06-17 22:29:59
  */
 package mylog
 
@@ -14,7 +14,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-func NewLogger() *zap.Logger {
+func NewLogger(ShowCaller bool) *zap.Logger {
 	// 配置终端日志显示格式，为普通文本格式
 	encoderConsole := zapcore.NewConsoleEncoder(zapcore.EncoderConfig{
 		LevelKey:     "level",
@@ -67,10 +67,18 @@ func NewLogger() *zap.Logger {
 	errorFileCore := zapcore.NewCore(encoderFile, zapcore.NewMultiWriteSyncer(errorFileWriteSyncer), highPriority)
 
 	coreArr := []zapcore.Core{consoleCore, infoFileCore, errorFileCore}
-	log := zap.New(
-		zapcore.NewTee(coreArr...),
-		zap.AddCaller(), // zap.AddCaller() 设为显示文件名和行号
-	)
+
+	var log *zap.Logger
+	if ShowCaller {
+		log = zap.New(
+			zapcore.NewTee(coreArr...),
+			zap.AddCaller(), // zap.AddCaller() 设为显示文件名和行号
+		)
+	} else {
+		log = zap.New(
+			zapcore.NewTee(coreArr...),
+		)
+	}
 
 	return log
 }

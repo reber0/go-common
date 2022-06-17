@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-05 17:49:03
- * @LastEditTime: 2022-06-17 23:17:17
+ * @LastEditTime: 2022-06-17 23:44:55
  */
 package mylog
 
@@ -70,14 +70,15 @@ func (mylog *MyLog) Logger() *zap.Logger {
 		consoleCore := setConsole()
 		infoFileCore, errorFileCore := setFile(mylog.InfoFile, mylog.ErrorFile)
 		coreArr = []zapcore.Core{consoleCore, infoFileCore, errorFileCore}
-	}
-	if mylog.IsToConsole {
-		consoleCore := setConsole()
-		coreArr = []zapcore.Core{consoleCore}
-	}
-	if mylog.IsToFile {
-		infoFileCore, errorFileCore := setFile(mylog.InfoFile, mylog.ErrorFile)
-		coreArr = []zapcore.Core{infoFileCore, errorFileCore}
+	} else {
+		if mylog.IsToConsole {
+			consoleCore := setConsole()
+			coreArr = []zapcore.Core{consoleCore}
+		}
+		if mylog.IsToFile {
+			infoFileCore, errorFileCore := setFile(mylog.InfoFile, mylog.ErrorFile)
+			coreArr = []zapcore.Core{infoFileCore, errorFileCore}
+		}
 	}
 
 	var log *zap.Logger

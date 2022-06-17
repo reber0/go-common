@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-05 17:49:03
- * @LastEditTime: 2022-06-17 23:44:55
+ * @LastEditTime: 2022-06-17 23:54:11
  */
 package mylog
 
@@ -20,7 +20,7 @@ type MyLog struct {
 	IsShowCaller bool
 }
 
-// 解析 URL
+// 初始化 MyLog
 func New() *MyLog {
 	return &MyLog{
 		Log:          &zap.Logger{},

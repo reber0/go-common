@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-05 17:49:03
- * @LastEditTime: 2022-06-17 23:54:11
+ * @LastEditTime: 2022-06-20 19:20:14
  */
 package mylog
 
@@ -18,6 +18,11 @@ type MyLog struct {
 	IsToConsole  bool
 	IsToFile     bool
 	IsShowCaller bool
+}
+
+// 初始化 Logger
+func NewLogger() *zap.Logger {
+	return New().Logger()
 }
 
 // 初始化 MyLog

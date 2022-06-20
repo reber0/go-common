@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-06-20 16:49:14
- * @LastEditTime: 2022-06-20 19:40:19
+ * @LastEditTime: 2022-06-20 20:22:05
  */
 package parse
 
@@ -25,7 +25,8 @@ import (
 func ParseIP(target string) []string {
 	var ips []string
 
-	template1 := `^([1-9]|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])){3}/(1[6789]|2[012346789]|3[012])$`
+	// template1 := `^([1-9]|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])){3}/([89]|1[0-9]|2[0-9]|3[012])$`
+	template1 := `^([1-9]|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])){3}/(1[6-9]|2[0-9]|3[012])$`
 	template2 := `^([1-9]|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])){3}-([1-9]|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$`
 	template3 := `^([1-9]|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])){3}$`
 
@@ -40,7 +41,7 @@ func ParseIP(target string) []string {
 			ips = append(ips, parse1(s)...)
 		case re2.MatchString(s):
 			reg := regexp.MustCompile(`(\d{1,3}\.\d{1,3}\.\d{1,3}\.)(\d{1,3})-(\d{1,3})`)
-			res := reg.FindStringSubmatch(s) // 返回 [abc@qq.com abc]
+			res := reg.FindStringSubmatch(s)
 			prev, x, y := res[1], res[2], res[3]
 			start, _ := strconv.Atoi(x)
 			end, _ := strconv.Atoi(y)

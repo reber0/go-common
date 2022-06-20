@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-06-20 16:49:14
- * @LastEditTime: 2022-06-20 19:05:28
+ * @LastEditTime: 2022-06-20 19:40:19
  */
 package parse
 
@@ -16,7 +16,12 @@ import (
 	"strings"
 )
 
-// 解析 ip 为列表，参数形如：1.1.1.1,2.2.2.2-5,3.3.3.3/24
+// 解析 ip 为列表（排除了 0 和 255）
+// 	target := "1.1.1.1,2.2.2.2-5,3.3.3.3/30"
+// 	ips := ParseIP(target)
+// 	// ips: [1.1.1.1
+// 	// 2.2.2.2 2.2.2.3 2.2.2.4 2.2.2.5
+// 	// 3.3.3.1 3.3.3.2 3.3.3.3]
 func ParseIP(target string) []string {
 	var ips []string
 

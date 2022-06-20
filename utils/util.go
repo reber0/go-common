@@ -9,6 +9,7 @@ package utils
 
 import (
 	"math/rand"
+	"reflect"
 	"strconv"
 	"time"
 
@@ -34,20 +35,32 @@ func RandomString(length int) string {
 	return string(result)
 }
 
-// 时间戳转时间字符串 => 2006-01-02 15:04:05
+// 时间戳转时间字符串
+// 	var t1 int = 1655725924
+// 	var t2 int64 = 1655725924
+// 	var t3 string = "1655725924"
+// 	timeStr1 := Unix2String(t1)
+// 	timeStr2 := Unix2String(t2)
+// 	timeStr3 := Unix2String(t3)
+// 	fmt.Println(timeStr1) // 2022-06-20 19:52:04
+// 	fmt.Println(timeStr2) // 2022-06-20 19:52:04
+// 	fmt.Println(timeStr3) // 2022-06-20 19:52:04
 func Unix2String(timestamp interface{}) string {
-	// 通过 i.(type) 来判断是什么类型,下面的 case 分支匹配到了则执行相关的分支
-	switch timestamp.(type) {
-	case int:
-		t := int64(timestamp.(int)) // interface 转为 int 再转为 int64
-		return time.Unix(t, 0).Format("2006-01-02 15:04:05")
-	case int64:
-		return time.Unix(timestamp.(int64), 0).Format("2006-01-02 15:04:05")
-	case string:
-		t, _ := strconv.ParseInt(timestamp.(string), 10, 64) // interface 转为 string 再转为 int64
-		return time.Unix(t, 0).Format("2006-01-02 15:04:05")
+	// 通过反射来判断是什么类型,下面的 case 分支匹配到了则执行相关的分支
+
+	var t int64
+
+	val := reflect.ValueOf(timestamp)
+	switch val.Kind() {
+	case reflect.Int:
+		t = val.Int()
+	case reflect.Int64:
+		t = val.Int()
+	case reflect.String:
+		t, _ = strconv.ParseInt(val.String(), 10, 64) // 先转为 string 再转为 int64
 	}
-	return ""
+
+	return time.Unix(t, 0).Format("2006-01-02 15:04:05")
 }
 
 // 获取终端宽度

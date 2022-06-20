@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-06-01 23:13:08
- * @LastEditTime: 2022-06-01 23:18:41
+ * @LastEditTime: 2022-06-20 17:26:46
  */
 package utils
 
@@ -11,6 +11,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
+	"net"
 	"time"
 
 	"github.com/go-resty/resty/v2"
@@ -34,6 +35,15 @@ func IsSiteAlive(url string) bool {
 		}
 	}
 	return false
+}
+
+// 判断是否为合法 IP
+func IsValidIP(ip string) bool {
+	if net.ParseIP(ip) != nil {
+		return true
+	} else {
+		return false
+	}
 }
 
 // 根据 resty 的 resp 获取 utf-8 编码的 html
